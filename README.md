@@ -1,52 +1,35 @@
-# Moteur de blogues - `blog.sh`
+# `blog.sh` — Générateur de blog statique en Bash
 
-Un moteur de blogue en **ligne de commande**, écrit en Bash.
-Il permet de créer, éditer et lier des pages en Markdown, puis de générer le
-blogue dans un **navigateur (HTML)** ou dans un **fichier PDF**.
+Un moteur de blog en ligne de commande écrit en Bash utilisant **Pandoc**. Il permet de créer, éditer et relier des pages en Markdown, puis de compiler l'ensemble du site à la fois en **HTML** (avec sommaire généré automatiquement) et en **document PDF unique**.
 
-**Auteurs :** Rafaël HOCQUEL · Zakaria SABRI · Adrian STYZINSKI   
-**Version :** 1.0 - décembre 2025
+## Fonctionnalités et commandes
 
-## Cahier des charges
+| Commande | Action | Détails |
+| :--- | :--- | :--- |
+| `./blog.sh editer <page>` | Créer ou éditer une page | Crée le fichier `markdown/<page>.md` s'il n'existe pas et l'ouvre dans l'éditeur du système |
+| `./blog.sh lister` | Lister les articles | Affiche l'ensemble des pages Markdown présentes dans le projet |
+| `./blog.sh construire` | Compiler le blog | Génère les pages HTML individuelles, l'index automatique (`web/index.html`) et l'archive complète `blog.pdf` |
+| `./blog.sh visualiser [pdf]` | Ouvrir le rendu | Ouvre le site dans le navigateur par défaut (version HTML par défaut, ou le PDF si l'argument `pdf` est passé) |
 
-| # | Exigence | Réalisation | Commande |
-|---|----------|-------------|----------|
-| 1 | Créer une page | Une page = un fichier Markdown dans `markdown/`<br> La commande `editer` crée le fichier s'il n'existe pas | `./blog.sh editer ma-page` |
-| 2 | Éditer une page existante | La page s'ouvre dans l'éditeur de texte du système | `./blog.sh editer ma-page` |
-| 3 | Lier les pages entre elles | Liens Markdown classiques entre pages<br> Un sommaire est généré automatiquement | `[Ma page](ma-page.html)` |
-| 4 | Générer le blogue en PDF | Toutes les pages réunies dans un seul document `blog.pdf` | `./blog.sh construire` |
-| 5 | Générer le blogue en HTML | Une page HTML par page<br> Un sommaire `web/index.html` est généré automatiquement | `./blog.sh construire` |
+**Maillage interne :** Les pages peuvent être reliées entre elles via la syntaxe Markdown standard (`[Ma page](ma-page.html)`), en complément du sommaire généré automatiquement à chaque compilation.
 
-## Contraintes techniques
+## Conception et choix techniques
 
-| Contrainte | Comment elle est respectée |
-|------------|----------------------------|
-| Édition possible avec n'importe quel éditeur | Le script ne dépend d'aucun éditeur : il utilise `$EDITOR`, puis `/usr/bin/editor`, puis `nano`, `vim` ou `vi` en fallback |
-| Code décomposé en fonctions, maintenable | 10 fonctions, une responsabilité chacune, aucune variable globale implicite |
-| Code commenté, cartouche devant chaque fonction | Chaque fonction est précédée d'un cartouche `Name / Description / Usage / Arguments / Return` |
+- **Détection de l'éditeur :** Le script n'impose aucun éditeur de texte en dur. Il interroge dans l'ordre la variable d'environnement `$EDITOR`, l'alternative système `/usr/bin/editor`, puis bascule en *fallback* sur `nano`, `vim` ou `vi`.
+- **Architecture modulaire :** Le script est découpé en 10 fonctions isolées (principe de responsabilité unique), sans variables globales implicites.
+- **Documentation standardisée :** Chaque fonction est documentée par un cartouche d'en-tête normalisé (`Name`, `Description`, `Usage`, `Arguments`, `Return`).
 
 ## Prérequis
 
-- **Bash** (Linux, macOS, WSL)
-- **Pandoc** - moteur de conversion Markdown → HTML/PDF
-  - Debian/Ubuntu : `sudo apt install pandoc`
+- **Bash** (Linux, macOS ou WSL)
+- **Pandoc** pour la conversion Markdown vers HTML et PDF :
+  - Debian / Ubuntu : `sudo apt install pandoc`
   - macOS : `brew install pandoc`
-- Un éditeur de texte en ligne de commande (`nano`, `vim`…)
+- Un éditeur en ligne de commande (`nano`, `vim`, etc.)
 
-## Installation
+## Installation et prise en main
 
-```
-bash
+```bash
 git clone https://github.com/rafael-hocquel/PU-moteur-blogues.git
 cd PU-moteur-blogues
 chmod +x blog.sh
-```
-
-## Usage
-```
-./blog.sh editer accueil        # écrit / modifie le contenu de la page "accueil"
-./blog.sh editer contact        # écrit / modifie le contenu de la page "contact"
-./blog.sh lister                # liste les pages existantes
-./blog.sh construire            # génère le blogue au formats PDF et HTML
-./blog.sh visualiser [pdf]            # ouvre le blogue dans un navigateur (html par défaut, pdf si l'option est précisée
-```
