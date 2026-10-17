@@ -1,4 +1,5 @@
 # `blog.sh` — Générateur de blog statique en Bash
+*Note : Projet réalisé avant ma prise en main de Git et importé a posteriori sur ce dépôt pour archivage (d'où l'absence d'historique de commits).*
 
 Un moteur de blog en ligne de commande écrit en Bash utilisant **Pandoc**. Il permet de créer, éditer et relier des pages en Markdown, puis de compiler l'ensemble du site à la fois en **HTML** (avec sommaire généré automatiquement) et en **document PDF unique**.
 
